@@ -30,6 +30,4 @@ tickets = auth(url, login, pw)['Ticket#']
 print(tickets)
 tickets.to_csv('Tickets.csv')
 
-def tickets_checker(ticket, check_url):
-    driver.get(check_url)
 
