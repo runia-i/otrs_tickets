@@ -1,2 +1,2 @@
 # otrs_tickets
-tickets parser for alert
+otrs tickets parser for announcement
