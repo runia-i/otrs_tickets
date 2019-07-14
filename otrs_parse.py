@@ -9,9 +9,13 @@ from selenium.webdriver.chrome.options import Options
 pw = getpass('Введите пароль:\t')
 login = 'khafizov.ri@bashkortostan.ru'
 url = "https://gku-service.bashkortostan.ru/otrs/index.pl?Action=AgentTicketStatusView"
+current_tickets = []
 
 
 def init_driver():
+    """
+    Initiation Chrome Webdriver
+    """
     options = Options()
     options.headless = True
     driver = webdriver.Chrome(chrome_options=options)
@@ -22,29 +26,37 @@ def init_driver():
 # TODO: переделать архитектуру кода под более pythonic-like(http://python-3.ru/page/selenium-python-example)
 
 
+def tickets_handler(tickets_list: list):
+    global current_tickets
+    if not current_tickets:
+        current_tickets = tickets_list
+    new_tickets = list(set(tickets_list) - set(current_tickets))
+    if new_tickets:
+        print('Новые заявки:\t', *new_tickets, sep=", ")
+        return new_tickets
+
+
 def lookup(driver, url):
     while True:
         driver.get(url)
         source = driver.page_source
-        print(source)  # Тестовый вывод
-        # Проверяем, что перед нами страница авторизации и вводим логин и пароль
+        # Проверяем, что перед нами страница авторизации и вводим логин/пароль
         if "User" in source and "Password" in source:
             elem_login = driver.find_element_by_name('User')
             elem_login.send_keys(login)
             elem_pw = driver.find_element_by_name('Password')
             elem_pw.send_keys(pw)
             elem_pw.submit()
-        # Считываем со html страницы таблицу с заявками, записываем в переменную tickets и json файл
         else:
+            # Считываем с html страницы таблицу с заявками, записываем в переменную tickets
             tables = pd.read_html(source, header=0)[0]
-            tickets = tables['Ticket#']
-            new_tables = tables[['Ticket#', 'БЛОКИРОВАТЬ  Блокировать']].copy()
-            print('Новая таблица:\n', new_tables)
-            # tickets.to_json('Tickets.json')
-            # TODO: Написать обработчик обновлений по номерам заявок
-            print('Старая таблица:\n', tickets)
+            tickets = tables['Ticket#'].values.tolist()
+            print('Новые заявки:\t', tickets)
+            print('Тип данных: \t', type(tickets))
+            tickets = tickets_handler(tickets)
             driver.quit()
             exit()
+            return tickets
 
 
 if __name__ == "__main__":
@@ -52,3 +64,4 @@ if __name__ == "__main__":
     lookup(driver, url)
     time.sleep(5)
     driver.quit()
+
