@@ -1,4 +1,5 @@
 import time
+import base64
 import pandas as pd
 from getpass import getpass
 from selenium import webdriver
@@ -7,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 
 # login = input('Введите логин:\t')
 pw = getpass('Введите пароль:\t')
-login = 'khafizov.ri@bashkortostan.ru'
+login = base64.b85decode('YiMC+X?kyVE^=u=VqtS=Yj1LNZ*z2EZZ2|l').decode("utf-8")
 url = "https://gku-service.bashkortostan.ru/otrs/index.pl?Action=AgentTicketQueue;QueueID=1;View=Small;Filter=All;;SortBy=Age;OrderBy=Down"
 current_tickets = []
 
@@ -33,8 +34,7 @@ def tickets_handler(tickets_list: list):
     new_tickets = list(set(tickets_list) - set(current_tickets))
     current_tickets = tickets_list
     if new_tickets:
-        print(time.time())
-        print('Новые заявки:\t', *new_tickets, sep=", ")
+        print('Новые заявки:\t', *new_tickets, sep=" ")
         return new_tickets
 
 
@@ -53,17 +53,16 @@ def lookup(driver, url):
             # Считываем с html страницы таблицу с заявками, записываем в переменную tickets
             tables = pd.read_html(source, header=0)[0]
             tickets = tables['Ticket#'].values.tolist()
-            # print('Заявки:\t', tickets)
-            # print('Тип данных: \t', type(tickets))
             tickets_handler(tickets)
-            # driver.quit()
-            # exit()
             time.sleep(60)
             continue
 
 
 if __name__ == "__main__":
-    driver = init_driver()
-    lookup(driver, url)
-    driver.quit()
+    try:
+        driver = init_driver()
+        lookup(driver, url)
+    except KeyboardInterrupt:
+        driver.quit()
+        exit()
 
