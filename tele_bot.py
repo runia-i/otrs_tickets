@@ -6,8 +6,8 @@ bot = telebot.TeleBot(base64.decode('NjQwODIzNzMzOkFBRlFhS0lGajJPMjZyT0VTaFQtbFJ
 
 
 @bot.message_handler(commands=['start'])
-def start_bot(messenge):
-    bot.send_message(messenge.chat_id, 'Ты написал мне /start, Бот запущен')
+def start_bot(message):
+    bot.send_message(message.chat_id, 'Ты написал мне /start, Бот запущен')
 
 
 bot.polling()
