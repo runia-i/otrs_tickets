@@ -21,7 +21,7 @@ def init_driver():
     """
     options = Options()
     options.headless = True
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    driver = webdriver.Chrome()
     return driver
 
 
