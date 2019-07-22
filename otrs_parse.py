@@ -2,7 +2,7 @@ import time
 import base64
 import telebot
 import pandas as pd
-from getpass import getpass
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
@@ -21,7 +21,7 @@ def init_driver():
     """
     options = Options()
     options.headless = True
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(ChromeDriverManager().install())
     return driver
 
 

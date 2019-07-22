@@ -5,6 +5,8 @@ bleach==3.1.0
 certifi==2019.3.9
 chardet==3.0.4
 colorama==0.4.1
+configparser==3.7.4
+crayons==0.2.0
 decorator==4.4.0
 defusedxml==0.6.0
 entrypoints==0.3
@@ -54,5 +56,6 @@ tornado==6.0.2
 traitlets==4.3.2
 urllib3==1.25.3
 wcwidth==0.1.7
+webdriver-manager==1.8.2
 webencodings==0.5.1
 widgetsnbextension==3.4.2
