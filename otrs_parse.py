@@ -60,7 +60,7 @@ def lookup(driver, url):
             tables = pd.read_html(source, header=0)[0]
             tickets = tables['Ticket#'].values.tolist()
             tickets_handler(tickets)
-            time.sleep(60)
+            time.sleep(10)
             continue
 
 
