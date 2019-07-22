@@ -1,9 +1,9 @@
 import time
 import base64
+import telebot
 import pandas as pd
 from getpass import getpass
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 
 # login = input('Введите логин:\t')
@@ -11,6 +11,8 @@ pw = getpass('Введите пароль:\t')
 login = base64.b85decode('YiMC+X?kyVE^=u=VqtS=Yj1LNZ*z2EZZ2|l').decode("utf-8")
 url = "https://gku-service.bashkortostan.ru/otrs/index.pl?Action=AgentTicketQueue;QueueID=1;View=Small;Filter=All;;SortBy=Age;OrderBy=Down"
 current_tickets = []
+token = base64.b64decode('NjQwODIzNzMzOkFBRlFhS0lGajJPMjZyT0VTaFQtbFJERUJlZzVodUY4ZUVj').decode('utf-8')
+bot = telebot.TeleBot(token)
 
 
 def init_driver():
@@ -19,9 +21,13 @@ def init_driver():
     """
     options = Options()
     options.headless = True
-    driver = webdriver.Chrome(chrome_options=options)
-    driver.wait = WebDriverWait(driver, 5)
+    driver = webdriver.Chrome()
     return driver
+
+
+def message_sender(messages):
+    for message in messages:
+        bot.send_message(-1001215130188, "Заявка № " + message + " в очереди отдела АИКС №3")
 
 
 # TODO: переделать архитектуру кода под более pythonic-like(http://python-3.ru/page/selenium-python-example)
@@ -34,8 +40,8 @@ def tickets_handler(tickets_list: list):
     new_tickets = list(set(tickets_list) - set(current_tickets))
     current_tickets = tickets_list
     if new_tickets:
-        print('Новые заявки:\t', *new_tickets, sep=" ")
-        return new_tickets
+        message_sender(new_tickets)
+        print(new_tickets, sep=" ")
 
 
 def lookup(driver, url):
