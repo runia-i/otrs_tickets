@@ -1,1 +1,1 @@
-web: python tele_bot.py
+web: python otrs_parse.py
