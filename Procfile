@@ -1,1 +1,1 @@
-web: python otrs_parse.py
+bot: python otrs_parse.py
