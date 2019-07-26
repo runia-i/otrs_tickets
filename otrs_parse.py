@@ -59,6 +59,7 @@ def lookup(driver, url):
             # Считываем с html страницы таблицу с заявками, записываем в переменную tickets
             tables = pd.read_html(source, header=0)[0]
             tickets = tables['Ticket#'].values.tolist()
+            print(tickets)
             tickets_handler(tickets)
             time.sleep(10)
             continue
