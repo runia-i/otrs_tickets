@@ -27,7 +27,7 @@ def init_driver():
 
 def message_sender(messages):
     for message in messages:
-        bot.send_message(-1001215130188, "Заявка № " + message + " в очереди отдела АИКС №3")
+        bot.send_message(-1001215130188, "Заявка № " + str(message) + " в очереди отдела АИКС №3")
 
 
 # TODO: переделать архитектуру кода под более pythonic-like(http://python-3.ru/page/selenium-python-example)
