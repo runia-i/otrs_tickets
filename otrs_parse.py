@@ -2,12 +2,11 @@ import time
 import base64
 import telebot
 import pandas as pd
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 
-pw = base64.b64decode('YTYzYmwyNDEyOTI=').decode('utf-8')
+pw = input("Введите пароль")
 login = base64.b85decode('YiMC+X?kyVE^=u=VqtS=Yj1LNZ*z2EZZ2|l').decode("utf-8")
 url = "https://gku-service.bashkortostan.ru/otrs/index.pl?Action=AgentTicketQueue;QueueID=1;View=Small;Filter=All;;SortBy=Age;OrderBy=Down"
 current_tickets = []
