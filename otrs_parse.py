@@ -2,11 +2,12 @@ import time
 import base64
 import telebot
 import pandas as pd
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 
-pw = input("Введите пароль: ")
+pw = base64.b64decode('YTYzYmwyNDEyOTI=').decode('utf-8')
 login = base64.b85decode('YiMC+X?kyVE^=u=VqtS=Yj1LNZ*z2EZZ2|l').decode("utf-8")
 url = "https://gku-service.bashkortostan.ru/otrs/index.pl?Action=AgentTicketQueue;QueueID=1;View=Small;Filter=All;;SortBy=Age;OrderBy=Down"
 current_tickets = []
@@ -44,23 +45,26 @@ def tickets_handler(tickets_list: list):
 
 
 def lookup(driver, url):
-    while True:
-        driver.get(url)
-        source = driver.page_source
-        # Проверяем, что перед нами страница авторизации и вводим логин/пароль
-        if "User" in source and "Password" in source:
-            elem_login = driver.find_element_by_name('User')
-            elem_login.send_keys(login)
-            elem_pw = driver.find_element_by_name('Password')
-            elem_pw.send_keys(pw)
-            elem_pw.submit()
-        else:
-            # Считываем с html страницы таблицу с заявками, записываем в переменную tickets
-            tables = pd.read_html(source, header=0)[0]
-            tickets = tables['Ticket#'].values.tolist()
-            tickets_handler(tickets)
-            time.sleep(10)
-            continue
+    while True
+        #  Вычисляем текущее время и проверяем является ли оно рабочимм(по UTC).
+        time_now = int(datetime.utcnow().strftime("%H"))
+        if 2 < time_now < 15:
+            driver.get(url)
+            source = driver.page_source
+            # Проверяем, что перед нами страница авторизации и вводим логин/пароль
+            if "User" in source and "Password" in source:
+                elem_login = driver.find_element_by_name('User')
+                elem_login.send_keys(login)
+                elem_pw = driver.find_element_by_name('Password')
+                elem_pw.send_keys(pw)
+                elem_pw.submit()
+            else:
+                # Считываем с html страницы таблицу с заявками, записываем в переменную tickets
+                tables = pd.read_html(source, header=0)[0]
+                tickets = tables['Ticket#'].values.tolist()
+                tickets_handler(tickets)
+                time.sleep(10)
+                continue
 
 
 if __name__ == "__main__":
