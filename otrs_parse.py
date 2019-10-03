@@ -73,5 +73,5 @@ if __name__ == "__main__":
         lookup(driver, url)
     except KeyboardInterrupt:
         driver.quit()
-        exit()
+        exit()        
 
